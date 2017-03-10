@@ -1,11 +1,11 @@
+function isStable = calc_orrsommerfeld(alpha, R, N)
+
 % Matlab script to find global eigenvalues for Poiseuille flow
-clear
-N=30;
-R=31965;
-alpha=1;
+
 % The collocation points are at ybar=cos(m*pi/(N-1)) for m=0..N-1
 % Setup matrix t of Chebyshev polynomials and their derivatives at each collocation
 % point
+
 for m=N-2:-1:2
     ybar=cos(m*pi/(N-1));
     t=0.0;
@@ -46,16 +46,19 @@ for j=1:N
 end
 
 % find eigenvalues c
-[V,D]=eig(a,b,'qz');
+[~,D]=eig(a,b,'qz');
 % put eigenvalues into plottable form
-d = diag(D);
-realc = real(d);
-imagc = imag(d);
+% d = diag(D);
+% realc = real(d);
+imagc = imag(diag(D));
 
-plot(realc,imagc,'+',[0 1],[0 0],'MarkerSize',10)
-xlabel('c_r','Fontsize',14);
-ylabel('c_i','Fontsize',14);
-axis([0 1 -1 0.1])
+% plot(realc,imagc,'+',[0 1],[0 0],'MarkerSize',10)
+% xlabel('c_r','Fontsize',14);
+% ylabel('c_i','Fontsize',14);
+% axis([0 1 -1 0.1])
 
 % Check if there are positive, finite c_i
-disp(max(imagc(~isinf(imagc)))>=0);
+isStable = logical(max(imagc(~isinf(imagc)))<0);
+
+end
+
