@@ -1,4 +1,4 @@
-function isStable = calc_orrsommerfeld(alpha, R, N)
+function maxCi = calc_orrsommerfeld(alpha, R, N)
 
 % Matlab script to find global eigenvalues for Poiseuille flow
 
@@ -58,7 +58,7 @@ imagc = imag(diag(D));
 % axis([0 1 -1 0.1])
 
 % Check if there are positive, finite c_i
-isStable = logical(max(imagc(~isinf(imagc)))<0);
+maxCi = max(imagc(~isinf(imagc)));
 
 end
 
