@@ -45,13 +45,19 @@ def main():
     ax3.plot(x,sinwave)  # make a plot
     fig3.savefig('sinwave.'+imgFmt, format=imgFmt)
     
-    
     # Superimpose sine wave over random fluctuations
     signal = sinwave + samps
     fig4 = plt.figure()
     ax4 = fig4.add_subplot(111)
     ax4.plot(x,signal)  # make a plot
     fig4.savefig('signal.'+imgFmt, format=imgFmt)
+    
+    # Get 50 observations of signal 
+    fig5 = plt.figure()
+    ax5 = fig5.add_subplot(111)
+    ax5.plot(x,signal)  
+    ax5.plot(obs_idx,signal[obs_idx],'o')
+    fig5.savefig('signal_obs.'+imgFmt, format=imgFmt)
     
     # print(samps)
     print('mean=',numpy.mean(samps))
