@@ -61,7 +61,7 @@ def main():
 def random_flow(amp=3,n=1000,mean=0):
     # round to nearest even number
     n = math.ceil(n/2)*2
-    samps = numpy.random.rand(n)*amp/2+mean
+    samps = numpy.random.rand(n)*amp+mean
     plusminus = numpy.tile(numpy.array([1,-1]),n/2)
     samps = numpy.multiply(samps, plusminus)
     return samps
