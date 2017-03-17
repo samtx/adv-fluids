@@ -37,7 +37,21 @@ def main():
     ax2.plot(obs_idx,obs,'o')  # make a plot
     fig2.savefig('observations.'+imgFmt, format=imgFmt)
     
+    # Generate sinusoidal wave
+    # amp = 10 m/s, mean = 30 m/s, period = 1000
+    sinwave = 10 * numpy.sin(2*numpy.pi/1000 * x) + 30
+    fig3 = plt.figure()
+    ax3 = fig3.add_subplot(111)
+    ax3.plot(x,sinwave)  # make a plot
+    fig3.savefig('sinwave.'+imgFmt, format=imgFmt)
     
+    
+    # Superimpose sine wave over random fluctuations
+    signal = sinwave + samps
+    fig4 = plt.figure()
+    ax4 = fig4.add_subplot(111)
+    ax4.plot(x,signal)  # make a plot
+    fig4.savefig('signal.'+imgFmt, format=imgFmt)
     
     # print(samps)
     print('mean=',numpy.mean(samps))
