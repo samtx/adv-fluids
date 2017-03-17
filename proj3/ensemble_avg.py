@@ -5,7 +5,7 @@ import numpy
 import numpy.random
 import math
 import matplotlib
-matplotlib.use('Agg')
+matplotlib.use('cairo')
 import matplotlib.pyplot as plt
 
 
@@ -17,24 +17,32 @@ def main():
     always zero.'''
     amp = 3
     n = 1000
-    imgFmt = 'png'
+    imgFmt = 'svg'
+    
+    x = numpy.arange(n)
     
     # Generate 1000 random fluctuations over 1 second
     samps = random_flow(amp,n)  # samples 
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot(111)
+    ax1.plot(x,samps)  # make a plot
+    fig1.savefig('fluctuations.'+imgFmt, format=imgFmt)
     
     # Generate 50 random observations of sample data
     obs_idx = numpy.random.permutation(n)[0:50]
+    obs = samps[obs_idx]  # observed samples
+    fig2 = plt.figure()
+    ax2 = fig2.add_subplot(111)
+    ax2.plot(x,samps)  # make a plot
+    ax2.plot(obs_idx,obs,'o')  # make a plot
+    fig2.savefig('observations.'+imgFmt, format=imgFmt)
     
     
-    
-
     
     # print(samps)
     print('mean=',numpy.mean(samps))
     print('std=',numpy.std(samps))
-    x = numpy.arange(n)
-    plt.plot(x,samps)
-    plt.savefig('ensemble.'+imgFmt, format=imgFmt)
+
     
 def random_flow(amp=3,n=1000,mean=0):
     # round to nearest even number
