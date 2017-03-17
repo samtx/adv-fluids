@@ -1,7 +1,7 @@
 % Matlab script to find global eigenvalues for Poiseuille flow
 clear
-N=30;
-R=31965;
+N=121;
+R=10000;
 alpha=1;
 % The collocation points are at ybar=cos(m*pi/(N-1)) for m=0..N-1
 % Setup matrix t of Chebyshev polynomials and their derivatives at each collocation
