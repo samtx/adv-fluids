@@ -20,7 +20,7 @@ def main():
     amp = 3
     n = 1000
     m = 50  # observations
-    imgFmt = 'eps'
+    imgFmt = 'png'
     imgFolder = 'img/'
     
     x = numpy.arange(n)
@@ -42,7 +42,7 @@ def main():
     # print('samps',samps)
     new_samps = numpy.zeros((n,m-1))
     for i in range(m-1):
-        print('i=',i)
+        # print('i=',i)
         new_samps[:,i] = random_flow(n)
     # print('new_samps',new_samps)
     tot_samps = numpy.append(samps2d, new_samps, axis=1)
@@ -94,9 +94,18 @@ def main():
     fig6.savefig(imgFolder+'signal_obs_only.'+imgFmt, format=imgFmt)
     
     # Find root mean square of observed samples
+    tot_obs = tot_samps[obs_idx,:]
     rootMeanSq = rms(tot_samps)
+    obsRMS = numpy.zeros(m)
+    for i in range(m):
+        obsRMS[i] = rms(tot_obs[i,:])
+    numpy.savetxt('obsRMS.dat',obsRMS,delimiter=',')
+    # numpy.savetxt('rootMeanSq.dat',rootMeanSq,delimiter=',')
+    print('rootMeanSq=',rootMeanSq)
+    print('mean(obsRMS)=',numpy.mean(obsRMS))
     totRMS = numpy.tile(rootMeanSq,m)
-    totRMS
+
+    # totRMS
     # print('rms(tot_samps)',rootMeanSq)
     totMean = numpy.mean(tot_samps,axis=0)
     totSinMean = totMean + sinwave[obs_idx]
@@ -120,6 +129,22 @@ def main():
     plt.legend((h1,h2,h3,h4),lbls,fontsize = 'small')
     plt.savefig(imgFolder+'signal_rms.'+imgFmt, format=imgFmt)
     
+    # plot RMS at each observed location
+    plt.figure()
+    # ax = fig.add_subplot(111)
+    h1, = plt.plot(x,sinwave,'b-.',linewidth=1.5,label='Base Sine Wave')  
+    h2,= plt.plot(x,signal,'b',alpha=0.5,label='Random Fluctuations') 
+    h3,= plt.plot(obs_idx,totSinMean,'ro-',label='Observation Means')
+    h4, = plt.plot(obs_idx,totSinMean + obsRMS,'k--',linewidth=1.5,label='Observation RMS')
+    plt.plot(obs_idx,totSinMean - obsRMS,'k--',linewidth=1.5)
+    plt.xlabel('Time (ms)')
+    plt.ylabel('$U$ m/s')
+    # lbls = [lb1,lb2,lb3,lb4]
+    lbls = ('Base Sine Wave','Random Fluctuations','Observation Means','Observation RMS')
+    plt.legend((h1,h2,h3,h4),lbls,fontsize = 'small')
+    plt.savefig(imgFolder+'signal_rms_each_obs.'+imgFmt, format=imgFmt, dpi=600)
+    
+    
     # fig = plt.figure()
     # ax = fig.add_subplot(111)
     # h1, = ax.plot(x,sinwave,'b-.',linewidth=1.5,label='Base Sine Wave')  
@@ -136,9 +161,12 @@ def main():
     # print(samps)
     # print('mean=',numpy.mean(samps))
     # print('std=',numpy.std(samps))
-    # print('rms(samps)=',rms(samps))
-    # print('rms(obs)=',rms(obs))
-
+    print('tot_obs.shape',tot_obs.shape)
+    print('rms(tot_obs)=',rms(tot_obs))
+    print('rms(samps)=',rms(samps))
+    print('rms(obs)=',rms(obs))
+    print('rms(tot_samps)=',rms(tot_samps))
+    
 
 def rms(u_prime):
     ''' Finds the root mean square of the turbulent perturbations
