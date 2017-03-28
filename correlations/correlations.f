@@ -7,13 +7,15 @@
         real, dimension(max_lag) :: rho, lags
         parameter, real :: pi = 3.141592653589793
         
-         C Generate sine wave
-         do t = 1, n
+        open(unit=1,file='output.dat',form='FORMATTED',action='WRITE')
+        
+        C Generate sine wave
+        do t = 1, n
             y1(t) = sin(t)
-         end do
+        end do
          
-         C Loop over tau
-         do tau = 0, max_lag-1
+        C Loop over tau
+        do tau = 0, max_lag-1
          
             C Shift the signal by tau
             y2(:) = 0.0
@@ -29,5 +31,11 @@
             rho(tau+1) = sum_num / sum_denom
             lags(tau+1) = tau
             
-         end do
+        end do
+        
+        C Write results to file
+        do i = 1,max_lag
+            write(unit=1, fmt="*") lags(i) rho(i)
+        end do
+        
       end program
