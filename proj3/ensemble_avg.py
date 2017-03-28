@@ -20,7 +20,7 @@ def main():
     amp = 3
     n = 1000
     m = 50  # observations
-    imgFmt = 'png'
+    imgFmt = 'eps'
     imgFolder = 'img/'
     
     x = numpy.arange(n)
@@ -30,6 +30,8 @@ def main():
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
     ax1.plot(x,samps)  # make a plot
+    ax1.set_xlabel('Time (ms)')
+    ax1.set_ylabel('$U$ m/s')
     fig1.savefig(imgFolder+'fluctuations.'+imgFmt, format=imgFmt)
     
     # Pick locations for 50 observations
@@ -63,6 +65,8 @@ def main():
     fig3 = plt.figure()
     ax3 = fig3.add_subplot(111)
     ax3.plot(x,sinwave)  # make a plot
+    ax3.set_xlabel('Time (ms)')
+    ax3.set_ylabel('$U$ m/s')
     fig3.savefig(imgFolder+'sinwave.'+imgFmt, format=imgFmt)
     
     # Superimpose sine wave over random fluctuations
