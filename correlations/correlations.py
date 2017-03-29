@@ -27,7 +27,6 @@ def main():
     maxlag = 200
     n = maxlag
     t = np.arange(n)  # time steps
-
     y1 = 10 + np.sin(t * np.pi/180)
     
     sinewave = 10 * np.sin(np.pi/180 * t) + 30
@@ -37,64 +36,38 @@ def main():
     y3 = np.cumsum(9 + np.random.rand(n))
     y4 = 9 + np.random.rand(n)
 
-
-    
     # autocorrelation
     y = y4
     rho = np.zeros(maxlag)
     lags = np.arange(maxlag)
     rho, lags = xcorr(y, norm='coeff', doDetrend=True)
     
-    # for t in range(maxlag):
-    #     # print(t)
-    #     ary = np.array([y[0:len(y)-t], y[t:len(y)]])
-    #     rho[t] = np.corrcoef(ary)[0][1]
-
-    # remove negative values
-        
-    # print(y.shape)
-    # print(rho.shape)
-    # print(lags.shape)
-    
     rho = np.delete(rho, range(maxlag-1))
     lags = np.delete(lags, range(maxlag-1))
-    
-    # print(y.shape)
-    # print(rho.shape)
-    # print(lags.shape)
-    # y_detrend = spsig.detrend(y)
-    # R = np.corrcoef(y)
-    # lag = np.argmax(R)
-    
+
+    plot_corr(lags, rho, imgFmt, imgFolder)
+
     # plot
     fig = plt.figure()
-    # fig = plt.figure(figsize=imgSize)
-    # ax = fig.add_subplot(121)
+    plt.plot(t, y)
+    plt.xlabel(r'$t$', fontsize=20)
+    plt.ylabel(r'$U$', fontsize=20)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.savefig(imgFolder+'random_samps.'+imgFmt, format=imgFmt, dpi=300)
+    
+
+def plot_corr(lags, rho, imgFmt='png', imgFolder='img/', fname='corr'):
+    fig = plt.figure()
     plt.plot(lags, rho)
-    plt.plot(np.zeros(maxlag),'--')
-    # h2, = plt.plot(lags,y,'--')
-    # plt.plot(obs_idx,totSinMean - obsRMS,'k--',linewidth=1.5)
+    plt.plot(np.zeros(lags.shape),'--')
     plt.xlabel(r'$\tau$', fontsize=22)
     plt.ylabel(r'$\rho$', fontsize=22)
     plt.title(r'Correlation with Increasing Time Lag', fontsize=20)
     plt.xticks(fontsize=16)
     plt.yticks(fontsize=16)
-    plt.savefig(imgFolder+'random.'+imgFmt, format=imgFmt, dpi=300)
-    
-    # plot
-    fig = plt.figure()
-    # fig = plt.figure(figsize=imgSize)
-    # ax = fig.add_subplot(121)
-    plt.plot(t, y)
-    # plt.plot(np.zeros(maxlag),'--')
-    # h2, = plt.plot(lags,y,'--')
-    # plt.plot(obs_idx,totSinMean - obsRMS,'k--',linewidth=1.5)
-    plt.xlabel(r'$t$', fontsize=20)
-    plt.ylabel(r'$U$', fontsize=20)
-    # plt.title(r'Correlation with Increasing Time Lag', fontsize=20)
-    plt.xticks(fontsize=16)
-    plt.yticks(fontsize=16)
-    plt.savefig(imgFolder+'random_samps.'+imgFmt, format=imgFmt, dpi=300)
+    plt.savefig(imgFolder+fname+'.'+imgFmt, format=imgFmt, dpi=300)
+
 
 def rms(u_prime):
     ''' Finds the root mean square of the turbulent perturbations
@@ -102,6 +75,7 @@ def rms(u_prime):
     sq = np.square(u_prime)
     N = sq.size
     return np.sqrt(sq.sum()/sq.size)
+    
     
 def random_flow(n=1000,amp=3,mean=0):
     # round to nearest even number

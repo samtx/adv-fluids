@@ -5,13 +5,17 @@ integer :: i, n, t, tau, max_lag
 real :: sum_num, sum_denom
 real, dimension(500) :: y1, y2
 real, dimension(500) :: rho, lags
-parameter, real :: pi = 3.141592653589793
+real :: pi = 3.141592653589793
 
-open(unit=1,file='output.dat',form='FORMATTED',action='WRITE')
+! open(unit=1,file='output.txt',form='FORMATTED',action='WRITE')
+open(unit=1,file='output.txt')
+
+max_lag = 500
+n = 500
 
 ! Generate sine wave
 do t = 1, n
-    y1(t) = sin(float(t))
+    y1(t) = sin(pi/180.0 * float(t))
 end do
  
 ! Loop over tau
@@ -35,7 +39,7 @@ end do
 
 ! Write results to file
 do i = 1,max_lag
-    write(unit=1, fmt=""(I6, F12.7)"") lags(i) rho(i)
+    write(unit=1, fmt="(F5.1, F12.7)") lags(i), rho(i)
 end do
 
 close(unit=1)
