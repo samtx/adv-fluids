@@ -7,7 +7,6 @@ real, dimension(500) :: y1, y2
 real, dimension(500) :: rho, lags
 real :: pi = 3.141592653589793
 
-! open(unit=1,file='output.txt',form='FORMATTED',action='WRITE')
 open(unit=1,file='output.txt')
 
 max_lag = 500
