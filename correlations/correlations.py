@@ -16,42 +16,124 @@ np.random.seed(42)  # seed the RNG
 
 def main():
     
-    imgFmt = 'eps'
-    imgFolder = 'img/'
+    imgFmt = 'png'
+    imgFolder = 'imgtest/'
     dpi = 300
     aspectRatio = (4,3)
     imgMagnifier = 2
     imgSize = tuple(x*imgMagnifier for x in aspectRatio) 
     # imgSize = None 
     
-    maxlag = 200
+    maxlag = 500
     n = maxlag
     t = np.arange(n)  # time steps
-    y1 = 10 + np.sin(t * np.pi/180)
-    
+    y1 = np.sin(t * np.pi/180)
+    y5 = np.zeros(n)
+    tau = 50
+    y5[0:(n-1)-tau] = y1[tau:n-1]
     sinewave = 10 * np.sin(np.pi/180 * t) + 30
     # samps = random_flow(maxlag,amp=3)
-    samps = np.random.rand(n)*6
+    samps = np.random.rand(n)*6 - 3
     y2 = sinewave + samps
     y3 = np.cumsum(9 + np.random.rand(n))
-    y4 = 9 + np.random.rand(n)
-
+    y6 = (np.random.rand(n)*2-1)
+    y4 = 10 + y6
+    
     # autocorrelation
-    y = y4
     rho = np.zeros(maxlag)
     lags = np.arange(maxlag)
-    rho, lags = xcorr(y, norm='coeff', doDetrend=True)
+    rho, lags = xcorr(y6, norm='coeff', doDetrend=True)
     
     rho = np.delete(rho, range(maxlag-1))
     lags = np.delete(lags, range(maxlag-1))
 
-    plot_corr(lags, rho, imgFmt, imgFolder)
+    plot_corr(lags, rho, imgFmt, imgFolder, fname='random5_detrend')
 
     # plot
     fig = plt.figure()
-    plt.plot(t, y)
+    h1, = plt.plot(t, y1)
+    h2, = plt.plot(t, y5)
     plt.xlabel(r'$t$', fontsize=20)
-    plt.ylabel(r'$U$', fontsize=20)
+    plt.ylabel(r'$V$', fontsize=20)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.legend([h1,h2],[r'$V(t)$',r'$V(t+50) $'],
+        loc=4)
+    plt.grid(True)
+    plt.title(r'Velocity Signals, $\tau=50$', fontsize=18)
+    plt.savefig(imgFolder+'signals.'+imgFmt, format=imgFmt, dpi=300)
+    
+    # plot
+    data = np.loadtxt('output.txt')
+    fig = plt.figure()
+    plt.plot(data[:,0], data[:,1])
+    plt.plot(np.zeros(lags.shape),'--')
+    plt.xlabel(r'$\tau$', fontsize=22)
+    plt.ylabel(r'$\rho$', fontsize=22)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.grid(True)
+    plt.title(r'Correlation with Increasing Time Lag', fontsize=18)
+    plt.savefig(imgFolder+'sinewave1.'+imgFmt, format=imgFmt, dpi=300)
+    
+    # plot
+    data = np.loadtxt('output2.txt')
+    fig = plt.figure()
+    plt.plot(data[:,0], data[:,1])
+    plt.plot(np.zeros(lags.shape),'--')
+    plt.xlabel(r'$\tau$', fontsize=22)
+    plt.ylabel(r'$\rho$', fontsize=22)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.grid(True)
+    plt.title(r'Correlation with Increasing Time Lag', fontsize=18)
+    plt.savefig(imgFolder+'sinewave6.'+imgFmt, format=imgFmt, dpi=300)
+    
+    # plot
+    data = np.loadtxt('output3.txt')
+    fig = plt.figure()
+    plt.plot(data[:,0], data[:,1])
+    plt.plot(np.zeros(lags.shape),'--')
+    plt.xlabel(r'$\tau$', fontsize=22)
+    plt.ylabel(r'$\rho$', fontsize=22)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.grid(True)
+    plt.title(r'Correlation with Increasing Time Lag', fontsize=18)
+    plt.savefig(imgFolder+'random2.'+imgFmt, format=imgFmt, dpi=300)
+    
+        # plot
+    data = np.loadtxt('output4.txt')
+    fig = plt.figure()
+    plt.plot(data[:,0], data[:,1])
+    plt.plot(np.zeros(lags.shape),'--')
+    plt.xlabel(r'$\tau$', fontsize=22)
+    plt.ylabel(r'$\rho$', fontsize=22)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.grid(True)
+    plt.title(r'Correlation with Increasing Time Lag', fontsize=18)
+    plt.savefig(imgFolder+'random3.'+imgFmt, format=imgFmt, dpi=300)
+    
+        # plot
+    data = np.loadtxt('output5.txt')
+    fig = plt.figure()
+    plt.plot(data[:,0], data[:,1])
+    plt.plot(np.zeros(lags.shape),'--')
+    plt.xlabel(r'$\tau$', fontsize=22)
+    plt.ylabel(r'$\rho$', fontsize=22)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.grid(True)
+    plt.title(r'Correlation with Increasing Time Lag', fontsize=18)
+    plt.savefig(imgFolder+'sinewave7.'+imgFmt, format=imgFmt, dpi=300)
+    
+
+    # plot
+    fig = plt.figure()
+    plt.plot(t, y4)
+    plt.xlabel(r'$t$', fontsize=20)
+    plt.ylabel(r'$V$', fontsize=20)
     plt.xticks(fontsize=16)
     plt.yticks(fontsize=16)
     plt.savefig(imgFolder+'random_samps.'+imgFmt, format=imgFmt, dpi=300)

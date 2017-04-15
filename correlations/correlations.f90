@@ -7,16 +7,36 @@ real, dimension(500) :: y1, y2
 real, dimension(500) :: rho, lags
 real :: pi = 3.141592653589793
 
-open(unit=1,file='output.txt')
+open(unit=1,file='output5.txt')
 
 max_lag = 500
 n = 500
 
-! Generate sine wave
-do t = 1, n
-    y1(t) = sin(pi/180.0 * float(t))
-end do
+! ! Generate sine wave
+! do t = 1, n
+!     y1(t) = sin(pi/180.0 * float(t))
+! end do
  
+! Generate sine wave with random fluctuations and nonzero mean 
+! do t = 1, n
+!     y1(t) = 30 + 10*sin(pi/180.0 * float(t)) + (rand()*6 - 3)
+! end do
+
+! ! Generate random fluctuations with nonzero mean 
+! do t = 1, n
+!     y1(t) = 10 + float(t) + (rand()*2 - 1)
+! end do
+
+! ! Generate random fluctuations with zero mean 
+! do t = 1, n
+!     y1(t) = float(t) + (rand()*2 - 1)
+! end do
+
+! Generate sine wave with random fluctuations and zero mean 
+do t = 1, n
+    y1(t) = 10*sin(pi/180.0 * float(t)) + (rand()*4 - 3)
+end do
+
 ! Loop over tau
 do tau = 0, max_lag-1
  

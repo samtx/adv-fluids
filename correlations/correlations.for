@@ -3,7 +3,8 @@
         IMPLICIT NONE
         INTEGER I, N, T, TAU, MAX_LAG
         REAL SUM_NUM, SUM_DENOM
-        REAL Y1(500), Y2(500)
+        REAL Y1(500)
+        REAL Y2(500)
         REAL RHO(500), LAGS(500)
         REAL PI
         
@@ -22,8 +23,8 @@ C       LOOP OVER TAU
         DO TAU = 0, MAX_LAG-1
          
 C       SHIFT THE SIGNAL BY TAU
-        Y2(1:N) = 0.0
-        Y2(1:N-TAU) = Y1(TAU:N)
+            Y2(1:N) = 0.0
+            Y2(1:N-TAU) = Y1(TAU:N)
         
 C       PERFORM THE CORRELATIONS
             SUM_NUM = 0.0
