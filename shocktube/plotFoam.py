@@ -5,8 +5,8 @@ import sys
 import pandas as pd
 import csv
 import numpy as np
-import matplotlib
-matplotlib.use('cairo')
+# import matplotlib
+# matplotlib.use('cairo')
 import matplotlib.pyplot as plt
 
 
@@ -19,28 +19,36 @@ def main(dir_=os.getcwd()):
     print('dir_+subdir=',dir_+subdir)
     dirPath = os.path.join(dir_,subdir)
     csvPath = foam2csv(dirPath, outPath)
-    
+
     # ---- Extract time plots from data ----
-    x0 = 1.995  # position to plot values over time
+    x0 = 4.995  # position to plot values over time
     df = pd.read_csv(csvPath)
     t, T, U, p = get_plot_data(df, x0)
-
+    plot_data(t, T, U, p, x0)
 
 
 def get_plot_data(df, x0):
     df = df[df['x']==x0]  # restrict data to that spatial location
-    print(df) 
-    df = df.sort_values(['t'])  # sort by increasing 
+    print(df)
+    df = df.sort_values(['t'])  # sort by increasing
     ary = df.as_matrix(columns=['t','T','U','p'])
     t = ary[:,0]
     T = ary[:,1]
     U = ary[:,2]
     p = ary[:,3]
-    # t = df['t']
-    # T = df['T']
-    # U = df['U']
-    # p = df['p']
     return t, T, U, p
+
+
+def plot_data(t, T, U, p, x0):
+    plt.plot(t, p)
+    plt.xlabel('t', fontsize=22)
+    plt.ylabel('p', fontsize=22)
+    plt.title(r'Pressure over time at x={0}'.format(x0), fontsize=20)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.ylim([20000,100000])
+    plt.show()
+
 
 def foam2csv(dirPath, outPath):
     data = pd.DataFrame()
@@ -53,10 +61,10 @@ def foam2csv(dirPath, outPath):
                 # print('t=',t,'  fpath=',fpath)
                 if t == '0':  # initial condition, also set U=0.0
                     # print('init!')
-                    tmpdf = pd.read_table(inFile, sep='\t', header=None, names=['x','T','p']) # read tab-delimited text file into tmp 
+                    tmpdf = pd.read_table(inFile, sep='\t', header=None, names=['x','T','p']) # read tab-delimited text file into tmp
                     tmpdf['U'] = 0.0
                 else:
-                    tmpdf = pd.read_table(inFile, sep='\t', header=None, names=['x','T','U','p']) # read tab-delimited text file into tmp 
+                    tmpdf = pd.read_table(inFile, sep='\t', header=None, names=['x','T','U','p']) # read tab-delimited text file into tmp
                 tmpdf['t'] = float(t)  # add time step column
                 data = data.append(tmpdf, ignore_index=True)
     # save dataframe to csv
@@ -102,23 +110,26 @@ def concatenate_files(ext='.xy', dir_=None, out_fname=None):
                     pass
                     # outFile.write(f.read())
     # outFile.close()
-    
+
 if __name__ == "__main__":
 
-    # ---- Extract time plots from data ----
-    x0 = 1.995  # position to plot values over time
-    csvPath = os.path.join(os.getcwd(),'data.csv')
-    df = pd.read_csv(csvPath)
-    t, T, U, p = get_plot_data(df, x0)
-    plt.plot(t, p)
-    plt.xlabel('t', fontsize=22)
-    plt.ylabel('p', fontsize=22)
-    plt.title(r'Pressure over time at x={0}'.format(x0), fontsize=20)
-    plt.xticks(fontsize=16)
-    plt.yticks(fontsize=16)
-    plt.ylim([20000,100000])
-    plt.savefig('plot.png')
-    # print('t=',t)
-    # print('T=',T)
-    # print('U=',U)
+    main()
+    # return
+    # # ---- Extract time plots from data ----
+    # x0 = 0.995  # position to plot values over time
+    # csvPath = os.path.join(os.getcwd(),'data.csv')
+    # df = pd.read_csv(csvPath)
+    # t, T, U, p = get_plot_data(df, x0)
+    # plt.plot(t, p)
+    # plt.xlabel('t', fontsize=22)
+    # plt.ylabel('p', fontsize=22)
+    # plt.title(r'Pressure over time at x={0}'.format(x0), fontsize=20)
+    # plt.xticks(fontsize=16)
+    # plt.yticks(fontsize=16)
+    # plt.ylim([20000,100000])
+    # plt.show()
+    # # plt.savefig('plot.png')
+    # # print('t=',t)
+    # # print('T=',T)
+    # # print('U=',U)
     # print('p=',p)
